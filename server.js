@@ -8,6 +8,8 @@ import handleProfileId from './controllers/profileId.js';
 import {handleImage} from './controllers/image.js';
 import {handleAPICall} from './controllers/image.js';
 
+const app = express();
+
 const db = knex({
   client: 'pg',
   connection: {
@@ -25,9 +27,9 @@ const corsOptions = {
   credentials: true,
 }
 
-const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.get('/', (req, res) => {
     res.json('Working!')
