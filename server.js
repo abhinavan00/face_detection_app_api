@@ -11,11 +11,11 @@ import {handleAPICall} from './controllers/image.js';
 const db = knex({
   client: 'pg',
   connection: {
-    host: '127.0.0.1',
+    host: 'dpg-d0m63fqdbo4c73chhuo0-a.oregon-postgres.render.com',
     port: 5432,
-    user: '',
-    password: '',
-    database: 'face_detection_app',
+    user: 'fda_db_user',
+    password: 'oKq7IcDccPQWxO2g4jZ1dTQpboKsWzfq',
+    database: 'fda_db',
   },
 });
 
