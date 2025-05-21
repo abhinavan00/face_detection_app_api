@@ -22,14 +22,14 @@ const db = knex({
 
 const corsOptions = {
   origin: 'https://face-detection-app-wenk.onrender.com',
-  methods: ['GET', 'POST', 'PUT'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Origin','Content-Type', 'Authorization'],
   credentials: true,
 }
 
-app.use(express.json());
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+app.use(express.json());
 
 app.get('/', (req, res) => {
     res.json('Working!')
