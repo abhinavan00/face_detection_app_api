@@ -20,34 +20,49 @@ const db = knex({
   },
 });
 
-// First, let's make your CORS configuration more flexible
+// Updated CORS configuration
 const corsOptions = {
-  origin: ['https://face-detection-app-wenk.onrender.com', process.env.FRONTEND_URL || 'http://localhost:3000'],
+  origin: 'https://face-detection-app-wenk.onrender.com',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  exposedHeaders: ['Access-Control-Allow-Origin'],
   credentials: true,
   optionsSuccessStatus: 200
-}
+};
 
+// Apply CORS middleware before defining routes
 app.use(cors(corsOptions));
-app.use(app.use(cors({ origin: '*' })));
+
+// Preflight requests handler
+app.options('*', cors(corsOptions));
+
+// Parse JSON requests
 app.use(express.json());
 
+// Basic route to check if server is running
 app.get('/', (req, res) => {
-    res.json('Working!')
-})
+    // Add CORS headers manually for extra security
+    res.header('Access-Control-Allow-Origin', 'https://face-detection-app-wenk.onrender.com');
+    res.json('Working!');
+});
 
-app.post('/signin', (req, res) => {handleSignin(req, res, db, bcrypt)})
+// Apply the same manual CORS headers to all routes
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://face-detection-app-wenk.onrender.com');
+    next();
+});
 
-app.post('/register', (req, res) => {handleRegister(req, res, db, bcrypt)})
+app.post('/signin', (req, res) => {handleSignin(req, res, db, bcrypt)});
 
-app.get('/profile/:id', (req, res) => {handleProfileId(req, res, db)})
+app.post('/register', (req, res) => {handleRegister(req, res, db, bcrypt)});
 
-app.put('/image', (req, res) =>  {handleImage(req, res, db)})
+app.get('/profile/:id', (req, res) => {handleProfileId(req, res, db)});
 
-app.post('/imageurl', (req, res) => {handleAPICall(req, res)})
+app.put('/image', (req, res) => {handleImage(req, res, db)});
+
+app.post('/imageurl', (req, res) => {handleAPICall(req, res)});
 
 const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
-    console.log(`app is running on port ${PORT}`)
-})
+    console.log(`app is running on port ${PORT}`);
+});
